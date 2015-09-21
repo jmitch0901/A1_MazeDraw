@@ -35,27 +35,28 @@ void View::resize(int w, int h){
 	aspectRatio = w/(float)h;
 
 	//The World-Window
-	if(w>=h){
-		worldWindowTop = 0.0f- PADDING;
-		worldWindowBottom = 1.0f+ PADDING;
+	if(aspectRatio>=1.0f){
+		worldWindowTop = 0.0f;
+		worldWindowBottom = 1.0f;
 		worldWindowLeft = 0.0f + (1.0f - aspectRatio)/2;
 		worldWindowRight = 1.0f - worldWindowLeft;
 
-		worldWindowLeft-=PADDING*aspectRatio;
-		worldWindowRight+=PADDING* aspectRatio;
+		//worldWindowLeft-=PADDING*aspectRatio;
+		//worldWindowRight+=PADDING* aspectRatio;
 
 
 	} else {
 		worldWindowTop = 0.0f + (1.0f - (1.0f/aspectRatio))/2;
 		worldWindowBottom = 1.0f - worldWindowTop;
-		worldWindowLeft = 0.0f - PADDING;
-		worldWindowRight = 1.0f + PADDING;
+		worldWindowLeft = 0.0f;
+		worldWindowRight = 1.0f;
 
-		worldWindowTop-=PADDING/aspectRatio;
-		worldWindowBottom+=PADDING/aspectRatio;
+		//worldWindowTop-=PADDING/aspectRatio;
+		//worldWindowBottom+=PADDING/aspectRatio;
 
 	}
 
+	mazeController->notifyAspectRationChanged(aspectRatio);
 	proj = glm::ortho(worldWindowLeft,worldWindowRight,worldWindowBottom,worldWindowTop);
 }
 
@@ -75,7 +76,7 @@ void View::initializeViewFromMaze(Maze &maze){
 
 	programID = linkShadersToGPU(shaders);
 
-	mazeController = new MazeController(maze,WINDOW_WIDTH,WINDOW_HEIGHT);
+	mazeController = new MazeController(maze,aspectRatio);
 	
 	glUseProgram(programID);
 
@@ -113,13 +114,6 @@ void View::initializeViewFromMaze(Maze &maze){
 
 	glBindVertexArray(vao);
 
-	//Old way
-	/*glBindBuffer(GL_ARRAY_BUFFER,vbo[2]);
-	glVertexAttribPointer(vPositionLocation,4,GL_FLOAT,GL_FALSE,sizeof(VertexAttribs),BUFFER_OFFSET(0));
-	glEnableVertexAttribArray(vPositionLocation);
-	glVertexAttribPointer(vColorLocation,3,GL_FLOAT,GL_FALSE,sizeof(VertexAttribs),BUFFER_OFFSET(4*sizeof(GLfloat)));
-    glEnableVertexAttribArray(vColorLocation);
-	*/
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 	glBindVertexArray(0);
 	glUseProgram(0);
@@ -142,8 +136,20 @@ void View::draw(){
     glBindVertexArray(vao);
 
 	//Giver a good offset later, when we contain all data inside one VBo
-	glDrawElements(GL_LINES,mazeController->getIndecesListSize(),GL_UNSIGNED_INT,BUFFER_OFFSET(0));
+	
 	//glDrawArrays(GL_POINTS, 0, 88);
+
+	if(isDrawingRect){
+
+		//Draws the maze only
+		glDrawElements(GL_LINES,mazeController->getIndecesListSize()-8,GL_UNSIGNED_INT,BUFFER_OFFSET(0));
+
+		//Draws your drawable rect only
+		glDrawElements(GL_LINES,8,GL_UNSIGNED_INT,BUFFER_OFFSET((sizeof(GLuint)*mazeController->getIndecesListSize()) - (sizeof(GLuint)*8)));
+
+	} else {
+		glDrawElements(GL_LINES,mazeController->getIndecesListSize(),GL_UNSIGNED_INT,BUFFER_OFFSET(0));
+	}
 
 	/*if(isDrawingRect){
 		//glBindVertexArray(vao[1]);
@@ -171,33 +177,23 @@ void View::draw(){
 void View::initTransparentRect(int xPixel, int yPixel){
 
 	/*float xScaleStart = (xPixel)/(float)(WINDOW_WIDTH);
-	float xScaleEnd = (xPixel+1)/(float)WINDOW_WIDTH;
+	float xScaleEnd = (xPixel+100)/(float)WINDOW_WIDTH;
 
 	float yScaleStart = (yPixel)/(float)(WINDOW_HEIGHT);
-	float yScaleEnd = (yPixel+1)/(float)WINDOW_HEIGHT;
+	float yScaleEnd = (yPixel+100)/(float)WINDOW_HEIGHT;*/
 
-	mazeController->pushCoordsToDrawableRect(xScaleStart,yScaleStart, xScaleEnd, yScaleEnd);
+	mazeController->pushCoordsToDrawableRect((float)xPixel, (float)yPixel);
 
-	
-	glUseProgram(programID);
-	glBindVertexArray(vao[1]);
-	glBindBuffer(GL_ARRAY_BUFFER,vbo[2]);
-	glBufferData(GL_ARRAY_BUFFER,mazeController->getByteCountForRectBuffer(),mazeController->getReferenceToRectArrayStart(),GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[3]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(GLuint)*mazeController->getIndecesRectListSize(), mazeController->getPointerToIndecesForRect(),GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ARRAY_BUFFER,vbo[0]);
-	glBindBuffer(GL_ARRAY_BUFFER,0);
-
-	glBindVertexArray(0);
-
-	glUseProgram(0);
-
-	isDrawingRect=true;*/
+	isDrawingRect=true;
+	reload();
 }
 
 void View::stopDrawingRect(){
+
+
+	isDrawingRect=false;
+	mazeController->stopDrawingCoordsForRect();
+	reload();
 	/*isDrawingRect=false;
 	mazeController->stopDrawingCoordsForRect(x1,y1,x2,y2,worldWindowLeft, worldWindowTop, worldWindowRight, worldWindowBottom);
 	cout<<"Starting: "<<x1<<", "<<y1<<" ENDING: "<<x2<<", "<<y2<<". "<<endl;
@@ -219,6 +215,23 @@ void View::stopDrawingRect(){
 	glUseProgram(0);*/
 
 
+}
+
+void View::reload(){
+	glUseProgram(programID);
+	glBindVertexArray(vao);
+	glBindBuffer(GL_ARRAY_BUFFER,vbo[0]);
+	glBufferData(GL_ARRAY_BUFFER,mazeController->getByteCountForBuffer(),mazeController->getReferenceToArrayStart(),GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[1]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(GLuint)*mazeController->getIndecesListSize(), mazeController->getPointerToIndeces(),GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER,vbo[0]);
+	glBindBuffer(GL_ARRAY_BUFFER,0);
+
+	glBindVertexArray(0);
+
+	glUseProgram(0);
 }
 
 void View::scaleTransparentRect(int x1, int y1, int x2, int y2){

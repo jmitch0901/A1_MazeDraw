@@ -38,17 +38,15 @@ private:
 
 	Maze *maze;
 	vector<VertexAttribs> vertices;
-	vector<GLuint> indeces;
+	vector<GLuint> indices;
 
 	//vector<VertexAttribs> verticesForDrawableRect;
 	//vector<GLuint> indicesForDrawableRect;
 
-
-	int windowWidth, windowHeight;
 	float aspectRatio;
 
-	float rowPadding;
-	float columnPadding;
+	float ROW_VERTEX_SPACING;
+	float COLUMN_VERTEX_SPACING;
 
 	
 	void initializeVertices();
@@ -57,7 +55,7 @@ private:
 	bool drawableReactangleVerticesArePushed;
 
 public:
-	MazeController(Maze& maze, const int windowWidth, const int windowHeight);
+	MazeController(Maze& maze,float aspectRatio);
 	~MazeController();
 
 	int getByteCountForBuffer() const;
@@ -70,8 +68,10 @@ public:
 	//GLuint* getPointerToIndecesForRect();
 	//int getIndecesRectListSize();
 
-	//void pushCoordsToDrawableRect(float x1, float y1, float x2, float y2);
-	//void stopDrawingCoordsForRect(int x1, int y1, int x2, int y2,float wwl, float wwu, float wwr, float wwd);
+	void notifyAspectRationChanged(float aspectRatio);
+
+	void pushCoordsToDrawableRect(float xPixel, float yPixel);
+	void stopDrawingCoordsForRect();
 
 	void printVerticeDebugList() const;
 

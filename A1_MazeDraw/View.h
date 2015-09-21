@@ -76,6 +76,8 @@ private:
 
 	GLint projectionLocation, modelViewLocation, vPositionLocation, vColorLocation;
 
+	void reload();
+
 };
 
 
