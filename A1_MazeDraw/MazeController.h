@@ -34,14 +34,14 @@ private:
 class MazeController{
 private:
 
-	int offsetForDrawableRect;
+	//int offsetForDrawableRect;
 
 	Maze *maze;
 	vector<VertexAttribs> vertices;
 	vector<GLuint> indeces;
 
-	vector<VertexAttribs> verticesForDrawableRect;
-	vector<GLuint> indicesForDrawableRect;
+	//vector<VertexAttribs> verticesForDrawableRect;
+	//vector<GLuint> indicesForDrawableRect;
 
 
 	int windowWidth, windowHeight;
@@ -53,7 +53,7 @@ private:
 	
 	void initializeVertices();
 	void initializeIndexArray();
-
+	
 	bool drawableReactangleVerticesArePushed;
 
 public:
@@ -65,13 +65,13 @@ public:
 	GLuint* getPointerToIndeces();
 	int getIndecesListSize() const;
 
-	int getByteCountForRectBuffer() const;
-	VertexAttribs *getReferenceToRectArrayStart();
-	GLuint* getPointerToIndecesForRect();
-	int getIndecesRectListSize();
+	//int getByteCountForRectBuffer() const;
+	//VertexAttribs *getReferenceToRectArrayStart();
+	//GLuint* getPointerToIndecesForRect();
+	//int getIndecesRectListSize();
 
-	void pushCoordsToDrawableRect(float x1, float y1, float x2, float y2);
-	void stopDrawingCoordsForRect(int x1, int y1, int x2, int y2,float wwl, float wwu, float wwr, float wwd);
+	//void pushCoordsToDrawableRect(float x1, float y1, float x2, float y2);
+	//void stopDrawingCoordsForRect(int x1, int y1, int x2, int y2,float wwl, float wwu, float wwr, float wwd);
 
 	void printVerticeDebugList() const;
 

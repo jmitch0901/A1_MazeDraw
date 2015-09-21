@@ -85,34 +85,41 @@ void View::initializeViewFromMaze(Maze &maze){
     vPositionLocation = glGetAttribLocation(programID,"vPosition");
     vColorLocation = glGetAttribLocation(programID,"vColor");
 
-	glGenVertexArrays(2,vao);
-	glBindVertexArray(vao[0]);
+	glGenVertexArrays(1,&vao);
+	glBindVertexArray(vao);
 	glGenBuffers(2,&vbo[0]);
 
-	glBindVertexArray(vao[1]);
-	glGenBuffers(2,&vbo[2]);
+	glBindVertexArray(vao);
+	glGenBuffers(2,vbo);
 
-	glBindVertexArray(vao[0]);
+	glBindVertexArray(vao);
 
 	glBindBuffer(GL_ARRAY_BUFFER,vbo[0]);
+
+	//After binding the VAo and VBo, push the Maze Drawable vertices from MazeController to Vbo.
 	glBufferData(GL_ARRAY_BUFFER,mazeController->getByteCountForBuffer(),mazeController->getReferenceToArrayStart(),GL_STATIC_DRAW);
 
+	//Do the same for the indeces array
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[1]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(GLuint)*mazeController->getIndecesListSize(), mazeController->getPointerToIndeces(),GL_STATIC_DRAW);
 
+
+	//Tell the shaders where we can link the position and memory
 	glBindBuffer(GL_ARRAY_BUFFER,vbo[0]);
 	glVertexAttribPointer(vPositionLocation,4,GL_FLOAT,GL_FALSE,sizeof(VertexAttribs),BUFFER_OFFSET(0));
 	glEnableVertexAttribArray(vPositionLocation);
 	glVertexAttribPointer(vColorLocation,3,GL_FLOAT,GL_FALSE,sizeof(VertexAttribs),BUFFER_OFFSET(4*sizeof(GLfloat)));
     glEnableVertexAttribArray(vColorLocation);
 
-	glBindVertexArray(vao[1]);
-	glBindBuffer(GL_ARRAY_BUFFER,vbo[2]);
+	glBindVertexArray(vao);
+
+	//Old way
+	/*glBindBuffer(GL_ARRAY_BUFFER,vbo[2]);
 	glVertexAttribPointer(vPositionLocation,4,GL_FLOAT,GL_FALSE,sizeof(VertexAttribs),BUFFER_OFFSET(0));
 	glEnableVertexAttribArray(vPositionLocation);
 	glVertexAttribPointer(vColorLocation,3,GL_FLOAT,GL_FALSE,sizeof(VertexAttribs),BUFFER_OFFSET(4*sizeof(GLfloat)));
     glEnableVertexAttribArray(vColorLocation);
-
+	*/
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 	glBindVertexArray(0);
 	glUseProgram(0);
@@ -132,12 +139,14 @@ void View::draw(){
 
     glUniformMatrix4fv(modelViewLocation,1,GL_FALSE,glm::value_ptr(modelView));
 	
-    glBindVertexArray(vao[0]);
+    glBindVertexArray(vao);
+
+	//Giver a good offset later, when we contain all data inside one VBo
 	glDrawElements(GL_LINES,mazeController->getIndecesListSize(),GL_UNSIGNED_INT,BUFFER_OFFSET(0));
 	//glDrawArrays(GL_POINTS, 0, 88);
 
-	if(isDrawingRect){
-		glBindVertexArray(vao[1]);
+	/*if(isDrawingRect){
+		//glBindVertexArray(vao[1]);
 
 		modelViewDrawableRect = 
 			glm::translate(glm::mat4(1.0),glm::vec3(x1/x2*2,y2/y1*2,1.0f)) 
@@ -149,7 +158,7 @@ void View::draw(){
 		glDrawElements(GL_LINES,mazeController->getIndecesRectListSize(),GL_UNSIGNED_INT,BUFFER_OFFSET(0));
 
 		
-	}
+	}*/
 
 	glBindVertexArray(0);
 
@@ -161,7 +170,7 @@ void View::draw(){
 
 void View::initTransparentRect(int xPixel, int yPixel){
 
-	float xScaleStart = (xPixel)/(float)(WINDOW_WIDTH);
+	/*float xScaleStart = (xPixel)/(float)(WINDOW_WIDTH);
 	float xScaleEnd = (xPixel+1)/(float)WINDOW_WIDTH;
 
 	float yScaleStart = (yPixel)/(float)(WINDOW_HEIGHT);
@@ -185,11 +194,11 @@ void View::initTransparentRect(int xPixel, int yPixel){
 
 	glUseProgram(0);
 
-	isDrawingRect=true;
+	isDrawingRect=true;*/
 }
 
 void View::stopDrawingRect(){
-	isDrawingRect=false;
+	/*isDrawingRect=false;
 	mazeController->stopDrawingCoordsForRect(x1,y1,x2,y2,worldWindowLeft, worldWindowTop, worldWindowRight, worldWindowBottom);
 	cout<<"Starting: "<<x1<<", "<<y1<<" ENDING: "<<x2<<", "<<y2<<". "<<endl;
 
@@ -207,13 +216,13 @@ void View::stopDrawingRect(){
 	glBindBuffer(GL_ARRAY_BUFFER,vbo[0]);
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 	glBindVertexArray(0);
-	glUseProgram(0);
+	glUseProgram(0);*/
 
 
 }
 
 void View::scaleTransparentRect(int x1, int y1, int x2, int y2){
-	float xScale = x1/(float)x2;
+	/*float xScale = x1/(float)x2;
 	float yScale = y1/(float)y2;
 
 	this->x1 = (float)x1;
@@ -223,7 +232,7 @@ void View::scaleTransparentRect(int x1, int y1, int x2, int y2){
 
 	
 
-	isDrawingRect = true;
+	isDrawingRect = true;*/
 }
 
 

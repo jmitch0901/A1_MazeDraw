@@ -100,7 +100,7 @@ void processEvent(sf::Event event,sf::RenderWindow& window)
 		resize(event.size.width, event.size.height);
 
 
-	if(event.mouseButton.button == sf::Mouse::Left && event.type == sf::Event::MouseButtonPressed){
+	/*if(event.mouseButton.button == sf::Mouse::Left && event.type == sf::Event::MouseButtonPressed){
 		cout<<"Mouse Pressed: "<<endl;
 		initialX = sf::Mouse::getPosition(window).x;
 		initialY = sf::Mouse::getPosition(window).y;
@@ -132,7 +132,7 @@ void processEvent(sf::Event event,sf::RenderWindow& window)
 		//cout<<"Your mouse position currently -> "<<currentX<<","<<currentY<<endl;
 
 		v.scaleTransparentRect(initialX,initialY,currentX,currentY);
-	}
+	}*/
 }
 
 

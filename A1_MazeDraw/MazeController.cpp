@@ -9,7 +9,7 @@ MazeController::MazeController(Maze& maze, const int WINDOW_WIDTH, const int WIN
 	this->windowWidth=WINDOW_WIDTH;
 
 	drawableReactangleVerticesArePushed = false;
-	offsetForDrawableRect = 0;
+	//offsetForDrawableRect = 0;
 	
 	initializeVertices();
 	initializeIndexArray();
@@ -62,26 +62,7 @@ void MazeController::initializeVertices(){
 	}
 
 
-	//Add a placeHolder for The vertices used for a drawable Rect
-	VertexAttribs drawableRectVertices;
-	drawableRectVertices.position[0] = 0.0f;//COLUMN_COUNT*columnPadding;
-	drawableRectVertices.position[1] = 0.0f;//aspectRatio/ROW_COUNT;
-	drawableRectVertices.position[2] = Z_POS;
-	drawableRectVertices.position[3] = W_POS;
-
-	for(int i=0; i < 3; i++){
-		if(i==0){
-			drawableRectVertices.colors[i]=1;
-		} else {
-			drawableRectVertices.colors[i]=0;
-		}
-	}
-
-	for(int i = 0; i < 4; i++){
-		verticesForDrawableRect.push_back(drawableRectVertices);
-	}
-
-	//End Placeholder
+	
 }
 
 
@@ -143,15 +124,61 @@ void MazeController::initializeIndexArray(){
 			}	
 		}
 	}
+}
 
-	
+
+int MazeController::getByteCountForBuffer() const{
+	return sizeof(VertexAttribs)* vertices.size();
+}
 
 
+VertexAttribs* MazeController::getReferenceToArrayStart(){
+	return &vertices[0];
+}
+
+GLuint* MazeController::getPointerToIndeces(){
+	return &indeces[0];
+}
+
+int MazeController::getIndecesListSize() const{
+	return indeces.size();
 }
 
 
 
-void MazeController::pushCoordsToDrawableRect(float startX, float startY, float endX, float endY){
+void MazeController::printVerticeDebugList() const{
+	
+}
+
+MazeController::~MazeController(){
+	cout<<"Deconstructing Maze Controller"<<endl;
+}
+
+//GOES INSDIE INITIALIZE VERTICES
+//Add a placeHolder for The vertices used for a drawable Rect???
+	/*VertexAttribs drawableRectVertices;
+	drawableRectVertices.position[0] = 0.0f;//COLUMN_COUNT*columnPadding;
+	drawableRectVertices.position[1] = 0.0f;//aspectRatio/ROW_COUNT;
+	drawableRectVertices.position[2] = Z_POS;
+	drawableRectVertices.position[3] = W_POS;
+
+	for(int i=0; i < 3; i++){
+		if(i==0){
+			drawableRectVertices.colors[i]=1;
+		} else {
+			drawableRectVertices.colors[i]=0;
+		}
+	}
+
+	for(int i = 0; i < 4; i++){
+		verticesForDrawableRect.push_back(drawableRectVertices);
+	}*/
+
+	//End Placeholder
+
+
+
+/*void MazeController::pushCoordsToDrawableRect(float startX, float startY, float endX, float endY){
 
 	//drawableRectVertices.clear();
 	VertexAttribs upLeft;
@@ -240,9 +267,9 @@ void MazeController::pushCoordsToDrawableRect(float startX, float startY, float 
 
 	}
 	drawableReactangleVerticesArePushed=true;
-}
+}*/
 
-void MazeController::stopDrawingCoordsForRect(int x1, int y1, int x2, int y2,float wwl, float wwu, float wwr, float wwd){
+/*void MazeController::stopDrawingCoordsForRect(int x1, int y1, int x2, int y2,float wwl, float wwu, float wwr, float wwd){
 	//cout<<"removing indeces"<<endl;
 
 	
@@ -323,28 +350,10 @@ void MazeController::stopDrawingCoordsForRect(int x1, int y1, int x2, int y2,flo
 
 
 
-}
+}*/
 
 
-
-int MazeController::getByteCountForBuffer() const{
-	return sizeof(VertexAttribs)* vertices.size();
-}
-
-
-VertexAttribs* MazeController::getReferenceToArrayStart(){
-	return &vertices[0];
-}
-
-GLuint* MazeController::getPointerToIndeces(){
-	return &indeces[0];
-}
-
-int MazeController::getIndecesListSize() const{
-	return indeces.size();
-}
-
-int MazeController::getByteCountForRectBuffer() const{
+/*int MazeController::getByteCountForRectBuffer() const{
 	return sizeof(VertexAttribs)*verticesForDrawableRect.size();
 }
 VertexAttribs* MazeController::getReferenceToRectArrayStart(){
@@ -355,13 +364,5 @@ GLuint* MazeController::getPointerToIndecesForRect(){
 }
 int MazeController::getIndecesRectListSize(){
 	return indicesForDrawableRect.size();
-}
-
-void MazeController::printVerticeDebugList() const{
-	
-}
-
-MazeController::~MazeController(){
-	cout<<"Deconstructing Maze Controller"<<endl;
-}
+}*/
 

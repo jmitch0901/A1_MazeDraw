@@ -22,6 +22,8 @@ class View{
         GLuint       shader; //the ID for this shader after it has been compiled
     } ShaderInfo;
 
+	
+
 public:
 	View();
 	~View();
@@ -65,8 +67,8 @@ private:
 
 	GLuint programID;
 
-	GLuint vao[2];
-	GLuint vbo[4];
+	GLuint vao;
+	GLuint vbo[2];
 
 	glm::mat4 proj,modelView,modelViewDrawableRect;
 
