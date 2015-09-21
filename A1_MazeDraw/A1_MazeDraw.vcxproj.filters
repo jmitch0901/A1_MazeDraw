@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Viewables">
+      <UniqueIdentifier>{a50f3a55-3f10-42fe-bc77-9ef1f5d4ad94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Viewables">
+      <UniqueIdentifier>{dba22ace-9ef0-4fdb-af57-c6c00e3ba022}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\DataStore">
+      <UniqueIdentifier>{f9ec3f18-4afd-4ec2-992c-8074b7c6c776}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\DataStore">
+      <UniqueIdentifier>{4a8a258b-2090-497d-9eef-2b661db6bccf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Controllers">
+      <UniqueIdentifier>{8a8c354e-a478-471c-88b3-24fad781335a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Controllers">
+      <UniqueIdentifier>{21f96e7c-5079-4f4f-ba3f-2be895aa2be1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="View.h">
+      <Filter>Header Files\Viewables</Filter>
+    </ClInclude>
+    <ClInclude Include="Maze.h">
+      <Filter>Header Files\DataStore</Filter>
+    </ClInclude>
+    <ClInclude Include="MazeController.h">
+      <Filter>Header Files\Controllers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="View.cpp">
+      <Filter>Source Files\Viewables</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Maze.cpp">
+      <Filter>Source Files\DataStore</Filter>
+    </ClCompile>
+    <ClCompile Include="MazeController.cpp">
+      <Filter>Source Files\Controllers</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="default.frag" />
+    <None Include="default.vert" />
+  </ItemGroup>
+</Project>
