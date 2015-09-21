@@ -157,8 +157,16 @@ void MazeController::notifyAspectRationChanged(float aspectRatio){
 }
 
 
-void MazeController::pushCoordsToDrawableRect(float xPixel, float yPixel){
+void MazeController::pushCoordsToDrawableRect(float xPixel, float yPixel, float WINDOW_WIDTH, float WINDOW_HEIGHT){
 
+
+	
+
+	float startX, startY, endX, endY = 0.0f;
+	startX = (xPixel-1)/WINDOW_WIDTH;
+	endX = (xPixel)/WINDOW_WIDTH;
+	startY=(yPixel-1)/WINDOW_HEIGHT;
+	endY = (yPixel)/WINDOW_HEIGHT;
 
 	//Debug by hardcode
 	/*startX = 0.15f;
@@ -166,17 +174,6 @@ void MazeController::pushCoordsToDrawableRect(float xPixel, float yPixel){
 	endX = 0.75f;
 	endY = 0.75f;*/
 
-	float startX, startY, endX, endY = 0.0f;
-
-
-
-	if(aspectRatio>=1.0f){
-		/*startX = (0.0f + (1.0f - aspectRatio)/2)/windowWidth;
-		endX = (1.0f - startX);
-		startY = */
-	} else {
-
-	}
 
 	VertexAttribs upLeft;
 	upLeft.position[0] = startX;

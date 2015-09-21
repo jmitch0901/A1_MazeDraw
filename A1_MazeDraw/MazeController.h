@@ -70,7 +70,7 @@ public:
 
 	void notifyAspectRationChanged(float aspectRatio);
 
-	void pushCoordsToDrawableRect(float xPixel, float yPixel);
+	void pushCoordsToDrawableRect(float xPixel, float yPixel, float WINDOW_WIDTH, float WINDOW_HEIGHT);
 	void stopDrawingCoordsForRect();
 
 	void printVerticeDebugList() const;

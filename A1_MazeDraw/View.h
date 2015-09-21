@@ -70,7 +70,7 @@ private:
 	GLuint vao;
 	GLuint vbo[2];
 
-	glm::mat4 proj,modelView,modelViewDrawableRect;
+	glm::mat4 proj,modelView;
 
 	GLuint NUM_VERTICES;
 

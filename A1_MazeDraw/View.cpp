@@ -34,6 +34,9 @@ void View::resize(int w, int h){
 	WINDOW_HEIGHT=h;
 	aspectRatio = w/(float)h;
 
+	if(mazeController!=NULL)
+		mazeController->notifyAspectRationChanged(aspectRatio);
+
 	//The World-Window
 	if(aspectRatio>=1.0f){
 		worldWindowTop = 0.0f;
@@ -56,7 +59,7 @@ void View::resize(int w, int h){
 
 	}
 
-	mazeController->notifyAspectRationChanged(aspectRatio);
+	
 	proj = glm::ortho(worldWindowLeft,worldWindowRight,worldWindowBottom,worldWindowTop);
 }
 
@@ -128,13 +131,14 @@ void View::draw(){
 
 	//How We scale the maze itself
 	modelView = glm::scale(glm::mat4(1.0),glm::vec3(1,1,1));
-
-	glUniformMatrix4fv(projectionLocation,1,GL_FALSE,glm::value_ptr(proj));
-
-    glUniformMatrix4fv(modelViewLocation,1,GL_FALSE,glm::value_ptr(modelView));
 	
     glBindVertexArray(vao);
 
+	
+	glUniformMatrix4fv(projectionLocation,1,GL_FALSE,glm::value_ptr(proj));
+
+		glUniformMatrix4fv(modelViewLocation,1,GL_FALSE,glm::value_ptr(modelView));
+	
 	//Giver a good offset later, when we contain all data inside one VBo
 	
 	//glDrawArrays(GL_POINTS, 0, 88);
@@ -144,10 +148,32 @@ void View::draw(){
 		//Draws the maze only
 		glDrawElements(GL_LINES,mazeController->getIndecesListSize()-8,GL_UNSIGNED_INT,BUFFER_OFFSET(0));
 
+		
 		//Draws your drawable rect only
+		glm::mat4 rectangleProj = glm::ortho(0.0f,1.0f,1.0f,0.0f);
+
+		//First, we want our drawing grid to be the whole screen again.
+		glUniformMatrix4fv(projectionLocation,1,GL_FALSE,glm::value_ptr(rectangleProj));
+
+
+		//Create transformation to scale rectangle
+		glm::mat4 rectangleTransorm = 	
+			 //glm::translate(glm::mat4(1.0f),glm::vec3(x1/WINDOW_WIDTH,y1/WINDOW_WIDTH,1.0f))  *
+			 glm::scale(glm::mat4(1.0f),glm::vec3(x2/x1,y2/y1,1.0f))  
+			 
+			 
+			 ;
+
+		glUniformMatrix4fv(modelViewLocation,1,GL_FALSE,glm::value_ptr(rectangleTransorm));
+
+
+
 		glDrawElements(GL_LINES,8,GL_UNSIGNED_INT,BUFFER_OFFSET((sizeof(GLuint)*mazeController->getIndecesListSize()) - (sizeof(GLuint)*8)));
 
 	} else {
+		
+		
+
 		glDrawElements(GL_LINES,mazeController->getIndecesListSize(),GL_UNSIGNED_INT,BUFFER_OFFSET(0));
 	}
 
@@ -176,13 +202,7 @@ void View::draw(){
 
 void View::initTransparentRect(int xPixel, int yPixel){
 
-	/*float xScaleStart = (xPixel)/(float)(WINDOW_WIDTH);
-	float xScaleEnd = (xPixel+100)/(float)WINDOW_WIDTH;
-
-	float yScaleStart = (yPixel)/(float)(WINDOW_HEIGHT);
-	float yScaleEnd = (yPixel+100)/(float)WINDOW_HEIGHT;*/
-
-	mazeController->pushCoordsToDrawableRect((float)xPixel, (float)yPixel);
+	mazeController->pushCoordsToDrawableRect((float)xPixel, (float)yPixel,(float)WINDOW_WIDTH, (float)WINDOW_HEIGHT);
 
 	isDrawingRect=true;
 	reload();
@@ -194,26 +214,6 @@ void View::stopDrawingRect(){
 	isDrawingRect=false;
 	mazeController->stopDrawingCoordsForRect();
 	reload();
-	/*isDrawingRect=false;
-	mazeController->stopDrawingCoordsForRect(x1,y1,x2,y2,worldWindowLeft, worldWindowTop, worldWindowRight, worldWindowBottom);
-	cout<<"Starting: "<<x1<<", "<<y1<<" ENDING: "<<x2<<", "<<y2<<". "<<endl;
-
-	//Resend the indeces data to the GPU...
-	glUseProgram(programID);
-	glBindVertexArray(vao[0]);
-
-	//glBindBuffer(GL_ARRAY_BUFFER,vbo[0]);
-	//glBufferData(GL_ARRAY_BUFFER,mazeController->getByteCountForBuffer(),mazeController->getReferenceToArrayStart(),GL_STATIC_DRAW);
-
-	//We ONLY need to update the indeces buffer object!
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[1]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(GLuint)*mazeController->getIndecesListSize(), mazeController->getPointerToIndeces(),GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ARRAY_BUFFER,vbo[0]);
-	glBindBuffer(GL_ARRAY_BUFFER,0);
-	glBindVertexArray(0);
-	glUseProgram(0);*/
-
 
 }
 
@@ -235,17 +235,10 @@ void View::reload(){
 }
 
 void View::scaleTransparentRect(int x1, int y1, int x2, int y2){
-	/*float xScale = x1/(float)x2;
-	float yScale = y1/(float)y2;
-
-	this->x1 = (float)x1;
-	this->y1=(float)y1;
-	this->x2 = (float)x2;
-	this->y2 = (float)y2;
-
-	
-
-	isDrawingRect = true;*/
+	this->x1=x1;
+	this->x2=x2;
+	this->y1=y1;
+	this->y2=y2;
 }
 
 
