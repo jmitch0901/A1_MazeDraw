@@ -48,11 +48,13 @@ private:
 	float ROW_VERTEX_SPACING;
 	float COLUMN_VERTEX_SPACING;
 
+	bool recVerticesPushed;
+
 	
 	void initializeVertices();
 	void initializeIndexArray();
 	
-	bool drawableReactangleVerticesArePushed;
+
 
 public:
 	MazeController(Maze& maze,float aspectRatio);
@@ -71,6 +73,7 @@ public:
 	void notifyAspectRationChanged(float aspectRatio);
 
 	void pushCoordsToDrawableRect(float xPixel, float yPixel, float WINDOW_WIDTH, float WINDOW_HEIGHT);
+	void onRectangleDragged(float x1, float y1, float x2, float y2);
 	void stopDrawingCoordsForRect();
 
 	void printVerticeDebugList() const;

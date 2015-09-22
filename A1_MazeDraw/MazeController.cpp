@@ -7,7 +7,7 @@ MazeController::MazeController(Maze& maze,float aspectRatio){
 	this->maze = &maze;
 	this->aspectRatio = aspectRatio;
 
-	drawableReactangleVerticesArePushed = false;
+	recVerticesPushed=false;
 	//offsetForDrawableRect = 0;
 	
 	initializeVertices();
@@ -156,6 +156,31 @@ void MazeController::notifyAspectRationChanged(float aspectRatio){
 	this->aspectRatio = aspectRatio;
 }
 
+void MazeController::onRectangleDragged(float xPixel, float yPixel, float WINDOW_WIDTH, float WINDOW_HEIGHT){
+	/*//1
+	vertices.push_back(upLeft);
+
+	//2
+	vertices.push_back(upRight);
+
+	//3
+	vertices.push_back(bottomRight);
+
+	//4
+	vertices.push_back(bottomLeft);*/
+
+
+	int i = vertices.size();
+
+	vertices[i-3].position[0] = xPixel/WINDOW_WIDTH;
+
+	vertices[i-2].position[0] = xPixel/WINDOW_WIDTH;
+	vertices[i-2].position[1] = yPixel/WINDOW_HEIGHT;
+
+	vertices[i-1].position[1] = yPixel/WINDOW_HEIGHT;
+	
+}
+
 
 void MazeController::pushCoordsToDrawableRect(float xPixel, float yPixel, float WINDOW_WIDTH, float WINDOW_HEIGHT){
 
@@ -239,11 +264,16 @@ void MazeController::pushCoordsToDrawableRect(float xPixel, float yPixel, float 
 	}
 	*/
 
-	
-
+	//1
 	vertices.push_back(upLeft);
+
+	//1
 	vertices.push_back(upRight);
+
+	//3
 	vertices.push_back(bottomRight);
+
+	//4
 	vertices.push_back(bottomLeft);
 
 	for(int i = 1; i <= 4; i++){
@@ -258,40 +288,11 @@ void MazeController::pushCoordsToDrawableRect(float xPixel, float yPixel, float 
 		}
 	}
 	
-//}
-
-		/*vertices[vertices.size() -4].position[i] = upLeft.position[i];
-		vertices[vertices.size() -3].position[i] = upRight.position[i];
-		vertices[vertices.size() -2].position[i] = bottomRight.position[i];
-		vertices[vertices.size() -1].position[i] = bottomLeft.position[i];*/
-
-
-	//cout<<"Vertices List Size ->"<<verticesForDrawableRect.size()<<endl;
-	
-
-	//cout<<"adding indices"<<endl;
-	//indeces.push_back(vertices.size() - 2);
-	//indeces.push_back(vertices.size() - 1);
-
-	
-	/*for(int i = 0; i < 4 ; i++){
-		indices.push_back(vertices.size()-i);
-
-		//cout<<"Pushing index->"<<i<<endl;
-
-		if(i!=3){
-			indices.push_back(i+1);
-			//cout<<"Pushing index->"<<(i+1)<<endl;
-		} else {
-			indices.push_back(vertices.size()-1);
-			//cout<<"Pushing index->"<<0<<endl;
-		}
-
-	}*/
-	drawableReactangleVerticesArePushed=true;
+	recVerticesPushed = true;
 }
 
 void MazeController::stopDrawingCoordsForRect(){
+	
 	for(int i = 0 ; i < 8; i++){
 		indices.pop_back();
 	}
@@ -299,6 +300,8 @@ void MazeController::stopDrawingCoordsForRect(){
 	for(int i = 0; i < 4; i++){
 		vertices.pop_back();
 	}
+
+	recVerticesPushed=false;
 }
 
 //GOES INSDIE INITIALIZE VERTICES

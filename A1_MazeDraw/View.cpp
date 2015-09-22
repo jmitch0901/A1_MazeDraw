@@ -157,14 +157,12 @@ void View::draw(){
 
 
 		//Create transformation to scale rectangle
-		glm::mat4 rectangleTransorm = 	
-			 //glm::translate(glm::mat4(1.0f),glm::vec3(x1/WINDOW_WIDTH,y1/WINDOW_WIDTH,1.0f))  *
-			 glm::scale(glm::mat4(1.0f),glm::vec3(x2/x1,y2/y1,1.0f))  
+		/*glm::mat4 rectangleTransorm = 	
 			 
-			 
+			 glm::scale(glm::mat4(1.0f),glm::vec3(x2/x1,y2/y1,1.0f))
 			 ;
 
-		glUniformMatrix4fv(modelViewLocation,1,GL_FALSE,glm::value_ptr(rectangleTransorm));
+		glUniformMatrix4fv(modelViewLocation,1,GL_FALSE,glm::value_ptr(rectangleTransorm));*/
 
 
 
@@ -239,6 +237,11 @@ void View::scaleTransparentRect(int x1, int y1, int x2, int y2){
 	this->x2=x2;
 	this->y1=y1;
 	this->y2=y2;
+
+	mazeController->onRectangleDragged(x2,y2,WINDOW_WIDTH,WINDOW_HEIGHT);
+	reload();
+
+
 }
 
 
