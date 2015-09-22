@@ -35,7 +35,8 @@ Maze::Maze(const string FILENAME){
 			} else {
 				int temp;
 				while(ss>>temp){
-					mazeCells.push_back(temp);
+					//mazeCells.push_back(temp);
+					mazeCells.push_back(1);
 				}	
 			}
 		}

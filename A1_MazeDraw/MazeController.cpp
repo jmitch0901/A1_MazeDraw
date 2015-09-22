@@ -314,28 +314,85 @@ void MazeController::stopDrawingCoordsForRect(float x1, float y1, float x2, floa
 	const int ROW_COUNT = maze->getRowCount();
 
 
+
+	for(int i = 1; i < vertices.size(); i++){
+		//We start at 1 because were comparing this vertex to it's prev vertex.
+		
+
+		if(vertices[i].position[0] >= xScaleStart && vertices[i-1].position[0] <= xScaleStart){
+			
+
+		}
+		
+
+
+
+	}
+
+	/*int colStart, rowStart = -1;
+
+	int colEnd, rowEnd = -1;
+
+	for(int i = 0; i < COLUMN_COUNT; i++){
+		if(vertices[i].position[0] < xScaleStart && vertices[i+1].position[0] > xScaleStart){
+			colStart = i;
+		}
+
+		if(vertices[i].position[0] < xScaleEnd && vertices[i+1].position[0] > xScaleEnd){
+			colEnd = i;
+			break;
+		}
+	}*/
+
+	
+
+
+	
+
+
+
 	//Just translate the logic to maze object, and reinitialize the controller
-	for(int i = 0; i <= ROW_COUNT; i++){
-		for(int j = 0; j <= COLUMN_COUNT; j++){
+	/*for(int i = 1; i < ROW_COUNT; i++){
+		for(int j = 1; j < COLUMN_COUNT; j++){
 
-			if(i==0 || i==ROW_COUNT || j==0 || j == COLUMN_COUNT)
-				continue;
-
-
-
-			int index = i*(COLUMN_COUNT+1)+j;
+			/*if(i==0 || i==ROW_COUNT || j==0 || j == COLUMN_COUNT)
+				continue;*/
 
 
 
+			/*int index = i*(COLUMN_COUNT+1)+j;
+
+			int INT_CODE = 0;
+
+			//left
 			if(
+				xScaleStart < vertices[index+1].position[0]
+				&& xScaleStart > vertices[index].position[0]
+				)
+				INT_CODE+=8;
+
+			//up
+			if(
+				
+				)
+				INT_CODE+=4;
+
+			maze->setCellLogicAsInteger(j,i,INT_CODE);*/
+
+
+			/*if(
 				vertices[index].position[0]>xScaleStart
 				&&vertices[index].position[0]<=xScaleEnd
 				&&vertices[index].position[1]>yScaleStart
 				&&vertices[index].position[1]<=yScaleEnd
 				)
-			{
+			{*/
+
+				
+
+
 				//Then change the wall logic inside the maze.cpp 
-				if(
+				/*if(
 					vertices[index].position[0]-COLUMN_VERTEX_SPACING>=xScaleStart
 					&&vertices[index].position[0]+COLUMN_VERTEX_SPACING<=xScaleEnd
 					&&vertices[index].position[1]-ROW_VERTEX_SPACING>=yScaleStart
@@ -351,39 +408,34 @@ void MazeController::stopDrawingCoordsForRect(float x1, float y1, float x2, floa
 					//Otherwise, we add walls to the cell if needed!
 
 					int INT_CODE = maze->getCellLogicAsInteger(j,i);
-
-					
 					//left
-					if((INT_CODE&1)!=1)
-						maze->setCellLogicAsInteger(j,i,INT_CODE+1);
+					if((INT_CODE&8)!=8)
+						maze->setCellLogicAsInteger(j,i,INT_CODE+8);
+					
+					INT_CODE = maze->getCellLogicAsInteger(j,i);
+
+
+					//up
+					if((INT_CODE&4)!=4)
+						maze->setCellLogicAsInteger(j,i,INT_CODE+4);
+					
 					
 					INT_CODE = maze->getCellLogicAsInteger(j,i);
 
 					//right
-					if((INT_CODE&4)!=4)
-						maze->setCellLogicAsInteger(j,i,INT_CODE+4);
-
-					INT_CODE = maze->getCellLogicAsInteger(j,i);
-
-			
-					//up
 					if((INT_CODE&2)!=2)
 						maze->setCellLogicAsInteger(j,i,INT_CODE+2);
-					
+
 					INT_CODE = maze->getCellLogicAsInteger(j,i);
-					
-					
-					
-		
+
 					//down
-					if((INT_CODE&8)!=8)
-						maze->setCellLogicAsInteger(j,i,INT_CODE+8);
+					if((INT_CODE&1)!=1)
+						maze->setCellLogicAsInteger(j,i,INT_CODE+1);
 					
-				
 				}
-			}
+			//}
 		}	
-	}
+	}*/
 
 }
 
