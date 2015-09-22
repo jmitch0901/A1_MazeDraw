@@ -53,7 +53,7 @@ private:
 	
 	void initializeVertices();
 	void initializeIndexArray();
-	
+
 
 
 public:
@@ -74,7 +74,9 @@ public:
 
 	void pushCoordsToDrawableRect(float xPixel, float yPixel, float WINDOW_WIDTH, float WINDOW_HEIGHT);
 	void onRectangleDragged(float x1, float y1, float x2, float y2);
-	void stopDrawingCoordsForRect();
+	void stopDrawingCoordsForRect(float x1, float y1, float x2, float y2, float WINDOW_WIDTH, float WINDOW_HEIGHT);
+
+	
 
 	void printVerticeDebugList() const;
 

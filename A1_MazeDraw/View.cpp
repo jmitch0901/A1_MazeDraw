@@ -134,10 +134,11 @@ void View::draw(){
 	
     glBindVertexArray(vao);
 
-	
+	//This ortho jsut for debugging
+	proj = glm::ortho(0.0f,1.0f,1.0f,0.0f);
 	glUniformMatrix4fv(projectionLocation,1,GL_FALSE,glm::value_ptr(proj));
 
-		glUniformMatrix4fv(modelViewLocation,1,GL_FALSE,glm::value_ptr(modelView));
+	glUniformMatrix4fv(modelViewLocation,1,GL_FALSE,glm::value_ptr(modelView));
 	
 	//Giver a good offset later, when we contain all data inside one VBo
 	
@@ -152,43 +153,20 @@ void View::draw(){
 		//Draws your drawable rect only
 		glm::mat4 rectangleProj = glm::ortho(0.0f,1.0f,1.0f,0.0f);
 
+		
+
 		//First, we want our drawing grid to be the whole screen again.
 		glUniformMatrix4fv(projectionLocation,1,GL_FALSE,glm::value_ptr(rectangleProj));
-
-
-		//Create transformation to scale rectangle
-		/*glm::mat4 rectangleTransorm = 	
-			 
-			 glm::scale(glm::mat4(1.0f),glm::vec3(x2/x1,y2/y1,1.0f))
-			 ;
-
-		glUniformMatrix4fv(modelViewLocation,1,GL_FALSE,glm::value_ptr(rectangleTransorm));*/
-
-
-
+		glLineWidth(5.0f);
 		glDrawElements(GL_LINES,8,GL_UNSIGNED_INT,BUFFER_OFFSET((sizeof(GLuint)*mazeController->getIndecesListSize()) - (sizeof(GLuint)*8)));
+		glLineWidth(1.0f);
 
 	} else {
 		
 		
-
 		glDrawElements(GL_LINES,mazeController->getIndecesListSize(),GL_UNSIGNED_INT,BUFFER_OFFSET(0));
 	}
 
-	/*if(isDrawingRect){
-		//glBindVertexArray(vao[1]);
-
-		modelViewDrawableRect = 
-			glm::translate(glm::mat4(1.0),glm::vec3(x1/x2*2,y2/y1*2,1.0f)) 
-			* glm::scale(glm::mat4(1.0),glm::vec3((x1/x2)*2,(y2/y1*2),1.0f));//....?
-
-		glUniformMatrix4fv(projectionLocation,1,GL_FALSE,glm::value_ptr(glm::ortho(0.0f,1.0f,1.0f,0.0f)));
-		glUniformMatrix4fv(modelViewLocation,1,GL_FALSE,glm::value_ptr(modelViewDrawableRect));
-		
-		glDrawElements(GL_LINES,mazeController->getIndecesRectListSize(),GL_UNSIGNED_INT,BUFFER_OFFSET(0));
-
-		
-	}*/
 
 	glBindVertexArray(0);
 
@@ -210,8 +188,19 @@ void View::stopDrawingRect(){
 
 
 	isDrawingRect=false;
-	mazeController->stopDrawingCoordsForRect();
+	mazeController->stopDrawingCoordsForRect(x1,y1,x2,y2,WINDOW_WIDTH,WINDOW_HEIGHT);
 	reload();
+
+}
+
+void View::notifyDataSetChanged(Maze* maze){
+
+	delete mazeController;
+	mazeController=NULL;
+
+	mazeController = new MazeController(*maze,aspectRatio);
+	reload();
+	
 
 }
 

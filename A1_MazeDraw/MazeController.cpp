@@ -291,8 +291,9 @@ void MazeController::pushCoordsToDrawableRect(float xPixel, float yPixel, float 
 	recVerticesPushed = true;
 }
 
-void MazeController::stopDrawingCoordsForRect(){
+void MazeController::stopDrawingCoordsForRect(float x1, float y1, float x2, float y2, float WINDOW_WIDTH, float WINDOW_HEIGHT){
 	
+	//Remove indeces and vertices we don't care about
 	for(int i = 0 ; i < 8; i++){
 		indices.pop_back();
 	}
@@ -302,7 +303,90 @@ void MazeController::stopDrawingCoordsForRect(){
 	}
 
 	recVerticesPushed=false;
+
+	//Now mess with maze logic
+	float xScaleStart = x1/WINDOW_WIDTH;
+	float yScaleStart = y1/WINDOW_HEIGHT;
+	float xScaleEnd = x2/WINDOW_WIDTH;
+	float yScaleEnd = y2/WINDOW_HEIGHT;
+
+	const int COLUMN_COUNT = maze->getColumnCount();
+	const int ROW_COUNT = maze->getRowCount();
+
+
+	//Just translate the logic to maze object, and reinitialize the controller
+	for(int i = 0; i <= ROW_COUNT; i++){
+		for(int j = 0; j <= COLUMN_COUNT; j++){
+
+			if(i==0 || i==ROW_COUNT || j==0 || j == COLUMN_COUNT)
+				continue;
+
+
+
+			int index = i*(COLUMN_COUNT+1)+j;
+
+
+
+			if(
+				vertices[index].position[0]>xScaleStart
+				&&vertices[index].position[0]<=xScaleEnd
+				&&vertices[index].position[1]>yScaleStart
+				&&vertices[index].position[1]<=yScaleEnd
+				)
+			{
+				//Then change the wall logic inside the maze.cpp 
+				if(
+					vertices[index].position[0]-COLUMN_VERTEX_SPACING>=xScaleStart
+					&&vertices[index].position[0]+COLUMN_VERTEX_SPACING<=xScaleEnd
+					&&vertices[index].position[1]-ROW_VERTEX_SPACING>=yScaleStart
+					&&vertices[index].position[1]+ROW_VERTEX_SPACING<=yScaleEnd
+					)
+
+				{
+					//Then the integer value for the maze at that cell must be 0!
+					
+					maze->setCellLogicAsInteger(j,i,0);
+				} else {
+
+					//Otherwise, we add walls to the cell if needed!
+
+					int INT_CODE = maze->getCellLogicAsInteger(j,i);
+
+					
+					//left
+					if((INT_CODE&1)!=1)
+						maze->setCellLogicAsInteger(j,i,INT_CODE+1);
+					
+					INT_CODE = maze->getCellLogicAsInteger(j,i);
+
+					//right
+					if((INT_CODE&4)!=4)
+						maze->setCellLogicAsInteger(j,i,INT_CODE+4);
+
+					INT_CODE = maze->getCellLogicAsInteger(j,i);
+
+			
+					//up
+					if((INT_CODE&2)!=2)
+						maze->setCellLogicAsInteger(j,i,INT_CODE+2);
+					
+					INT_CODE = maze->getCellLogicAsInteger(j,i);
+					
+					
+					
+		
+					//down
+					if((INT_CODE&8)!=8)
+						maze->setCellLogicAsInteger(j,i,INT_CODE+8);
+					
+				
+				}
+			}
+		}	
+	}
+
 }
+
 
 //GOES INSDIE INITIALIZE VERTICES
 //Add a placeHolder for The vertices used for a drawable Rect???

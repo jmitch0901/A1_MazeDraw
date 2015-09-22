@@ -30,6 +30,8 @@ void initializeFromMaze(Maze &maze);
 
 sf::RenderWindow* renderWindow;
 
+Maze* maze;
+
 int main(int argc, char *argv[]){
 	frames = 0;
 	frame_rate = 0;
@@ -59,6 +61,7 @@ int main(int argc, char *argv[]){
 
 	//Use comman line args eventually
 	Maze myMaze("maze-10x10.txt");
+	maze = &myMaze;
 	initializeFromMaze(myMaze);
 
 
@@ -119,6 +122,7 @@ void processEvent(sf::Event event,sf::RenderWindow& window)
 		cout<<"Mouse Released"<<endl;
 		mouseIsPressed = false;
 		v.stopDrawingRect();
+		v.notifyDataSetChanged(maze);
 		//v.updateViewToRectangleDrawn(initialX, initialY,currentX,currentY);
 		
 	}
